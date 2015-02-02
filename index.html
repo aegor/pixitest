@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Player cloner by Igor Akulov (egor@akulovs.com) </title>
+    <style>
+body
+{
+    position: fixed; 
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+}
+    </style>
+    <script src="pixi.js"></script>
+
+</head>
+<body>
+    <script>
+
+    var players ={};
+    players.count = 2;
+    players.width = 1280 ;
+    players.height = 720 ;
+    players.videoSrc = "small-displays.webm";
+    players.screenx = players.count*players.width;
+    players.screeny = players.height;
+
+    var stage = new PIXI.Stage(0x66FF99);
+    var renderer = PIXI.autoDetectRenderer(3840, players.screeny); /*3840 - good, 3840 + (300,3000) - video width increases disproportionally */
+    document.body.appendChild(renderer.view);
+    requestAnimFrame(animate);
+
+	var video = document.createElement('video');
+    video.crossOrigin = "anonymous"; // important, if you load video from cross-origin location!!!
+                                     // see: https://code.google.com/p/chromium/issues/detail?id=422338
+	video.src = players.videoSrc;
+	video.width = players.width;
+	video.height = players.height;
+	video.autoPlay = true;
+	video.loop = true;
+	video.muted = true;
+	video.play();
+
+	var texture = PIXI.VideoTexture.textureFromVideo(video, PIXI.scaleModes.LINEAR);
+    var sprites = [];
+    
+    for (var i=0; i < players.count; i++) {
+		sprites[i] = new PIXI.Sprite(texture); // create a new Sprites using the video texture (yes it's that easy)
+		sprites[i].anchor.x = 0; // center the sprites anchor point
+		sprites[i].anchor.y = 0;
+		sprites[i].width = players.width;
+		sprites[i].height = players.height;
+		sprites[i].position.x = players.width*i;
+		sprites[i].position.y = 0;
+		sprites[i].scale.x = 0.5;
+		stage.addChild(sprites[i]);
+
+	    console.log(sprites);
+	}
+
+    function animate() {
+        requestAnimFrame(animate);
+        renderer.render(stage);
+    }
+    </script>
+    </body>
+</html>
