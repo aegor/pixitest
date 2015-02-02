@@ -14,7 +14,7 @@ body
     background-color: #000000;
 }
     </style>
-    <script src="pixi.js"></script>
+    <script src="pixi.dev.js"></script>
 
 </head>
 <body>
@@ -29,7 +29,7 @@ body
     players.screeny = players.height;
 
     var stage = new PIXI.Stage(0x66FF99);
-    var renderer = PIXI.autoDetectRenderer(3840, players.screeny); /*3840 - good, 3840 + (300,3000) - video width increases disproportionally */
+    var renderer = PIXI.autoDetectRenderer(3840, players.screeny, {resolution: 1}); /*3840 - good, 3840 + (300,3000) - video width increases disproportionally */
     document.body.appendChild(renderer.view);
     requestAnimFrame(animate);
 
@@ -55,11 +55,9 @@ body
 		sprites[i].height = players.height;
 		sprites[i].position.x = players.width*i;
 		sprites[i].position.y = 0;
-		sprites[i].scale.x = 0.5;
 		stage.addChild(sprites[i]);
-
-	    console.log(sprites);
 	}
+    console.log(sprites);
 
     function animate() {
         requestAnimFrame(animate);
